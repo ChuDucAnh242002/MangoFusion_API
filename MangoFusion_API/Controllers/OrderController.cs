@@ -8,6 +8,8 @@ using System.Net;
 
 namespace MangoFusion_API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class OrderController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -112,6 +114,87 @@ namespace MangoFusion_API.Controllers
                 
             }
             catch(Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages.Add(ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPut("{orderId:int}")]
+        public ActionResult<ApiResponse> UpdateOrder(int orderId, [FromBody] OrderHeaderUpdateDTO orderHeaderDTO)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if(orderId != orderHeaderDTO.OrderHeaderId)
+                    {
+                        _response.IsSuccess = false;
+                        _response.StatusCode = HttpStatusCode.BadRequest;
+                        _response.ErrorMessages.Add("Invalid Id");
+                        return BadRequest(_response);
+                    }
+
+                    OrderHeader? orderHeaderFromDb = _db.OrderHeaders.FirstOrDefault(u => u.OrderHeaderId == orderId);
+
+                    if(orderHeaderFromDb == null)
+                    {
+                        _response.IsSuccess = false;
+                        _response.StatusCode = HttpStatusCode.NotFound;
+                        _response.ErrorMessages.Add("Order not found");
+                        return NotFound(_response);
+                    }
+
+                    if (!string.IsNullOrEmpty(orderHeaderDTO.PickUpName))
+                    {
+                        orderHeaderFromDb.PickUpName = orderHeaderDTO.PickUpName;
+                    }
+                    if (!string.IsNullOrEmpty(orderHeaderDTO.PickUpPhoneNumber))
+                    {
+                        orderHeaderDTO.PickUpPhoneNumber = orderHeaderDTO.PickUpPhoneNumber;
+                    }
+                    if (!string.IsNullOrEmpty(orderHeaderDTO.PickUpName))
+                    {
+                        orderHeaderDTO.PickUpEmail = orderHeaderDTO.PickUpName;
+                    }
+                    if (!string.IsNullOrEmpty(orderHeaderDTO.Status))
+                    {
+                        if((orderHeaderFromDb.Status.Equals(SD.status_confirmed, StringComparison.InvariantCultureIgnoreCase))
+                            && (orderHeaderDTO.Status.Equals(SD.status_readyForPickUp, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            orderHeaderFromDb.Status = SD.status_readyForPickUp;
+                        }
+
+                        if ((orderHeaderFromDb.Status.Equals(SD.status_readyForPickUp, StringComparison.InvariantCultureIgnoreCase))
+                            && (orderHeaderDTO.Status.Equals(SD.status_completed, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            orderHeaderFromDb.Status = SD.status_readyForPickUp;
+                        }
+
+                        if (orderHeaderDTO.Status.Equals(SD.status_cancelled, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            orderHeaderFromDb.Status = SD.status_cancelled;
+                        }
+                    }
+
+                    _db.SaveChanges();
+
+                    _response.StatusCode = HttpStatusCode.NoContent;
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = ModelState.Values.SelectMany(u => u.Errors).Select(u => u.ErrorMessage).ToList();
+                    return BadRequest(_response);
+                }
+
+
+            }
+            catch (Exception ex)
             {
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
