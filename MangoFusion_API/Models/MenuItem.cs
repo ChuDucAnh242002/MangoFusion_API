@@ -1,5 +1,6 @@
 ﻿using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MangoFusion_API.Models
 {
@@ -16,5 +17,7 @@ namespace MangoFusion_API.Models
         public double Price { get; set; }
         [Required]
         public string Image { get; set; } = string.Empty;
+        [NotMapped]
+        public double Rating { get; set; }
     }
 }
