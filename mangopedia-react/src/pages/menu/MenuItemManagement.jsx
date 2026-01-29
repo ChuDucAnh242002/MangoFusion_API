@@ -1,9 +1,41 @@
-import MenuItemModal from "../../components/menuItem/MenuItemModel";
+import MenuItemModal from "../../components/menuItem/MenuItemModal";
 import MenuItemTable from "../../components/menuItem/MenuItemTable";
 import { useGetMenuItemsQuery } from "../../store/api/menuItemApi";
+import { useState } from "react";
 
 function MenuManagement() {
   const { data: menuItems, isLoading, error, refetch } = useGetMenuItemsQuery();
+
+  const [showModal, setShowModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    specialTag: "",
+    category: "",
+    price: "",
+    image: null,
+  });
+
+  const handleFormSubmit = (formData) => {
+    setIsSubmitting(true);
+    try {
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <div className="container-fluid p-4 mx-3">
@@ -16,7 +48,10 @@ function MenuManagement() {
                 Manage your restaurant's menu items
               </p>
             </div>
-            <button className="btn btn-primary">
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowModal(true)}
+            >
               <i className="bi bi-plus-circle me-2"></i>
               Add Menu Item
             </button>
@@ -36,7 +71,15 @@ function MenuManagement() {
           </div>
         </div>
       </div>
-      <MenuItemModal />
+      {showModal && (
+        <MenuItemModal
+          formData={formData}
+          onSubmit={handleFormSubmit}
+          onClose={handleCloseModal}
+          isSubmitting={isSubmitting}
+          onChange={handleInputChange}
+        />
+      )}
     </div>
   );
 }

@@ -20,7 +20,7 @@ function MenuItemTable({ menuItems, isLoading, error }) {
       </div>
     );
   }
-  console.log(menuItems);
+
   if (!menuItems) {
     return (
       <div className="text-center py-5">

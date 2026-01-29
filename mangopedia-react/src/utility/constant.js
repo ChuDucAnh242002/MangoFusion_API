@@ -10,3 +10,13 @@ export const ROUTES = {
 }
 
 export const API_BASE_URL = "https://localhost:7227"
+
+export const CATEGORY = ["Appetizer", "Entrée", "Dessert"];
+
+export const SPECIAL_TAG = [
+    "",
+    "Best Seller",
+    "Top Rated",
+    "Chef's Special",
+    "New"
+]
