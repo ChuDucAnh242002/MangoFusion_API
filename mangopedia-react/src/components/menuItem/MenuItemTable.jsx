@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "../../utility/constant";
 
-function MenuItemTable({ menuItems, isLoading, error }) {
+function MenuItemTable({ menuItems, isLoading, error, onDelete, onEdit }) {
   if (isLoading) {
     return (
       <div className="text-center py-4">
@@ -81,12 +81,14 @@ function MenuItemTable({ menuItems, isLoading, error }) {
                 <td>
                   <div className="btn-group" role="group">
                     <button
+                      onClick={() => onEdit(item)}
                       className="btn btn-sm btn-outline-success"
                       title="Edit"
                     >
                       <i className="bi bi-pencil"></i>
                     </button>
                     <button
+                      onClick={() => onDelete(item)}
                       className="btn btn-sm btn-outline-danger"
                       title="Delete"
                     >

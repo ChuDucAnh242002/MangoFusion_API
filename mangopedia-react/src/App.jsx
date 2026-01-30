@@ -1,6 +1,7 @@
 import AppRoutes from "./routes/AppRouter";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -10,6 +11,18 @@ function App() {
         <AppRoutes />
       </main>
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

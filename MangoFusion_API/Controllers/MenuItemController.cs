@@ -156,31 +156,34 @@ namespace MangoFusion_API.Controllers
                     menuItemFromDb.SpecialTag = menuItemUpdateDto.SpecialTag;
                     menuItemFromDb.Price = menuItemUpdateDto.Price;
 
-                    if (menuItemUpdateDto.File != null || menuItemUpdateDto.File.Length > 0)
+                    if (menuItemUpdateDto.File != null)
                     {
-                        var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
-                        if (!Directory.Exists(imagePath))
+                        if(menuItemUpdateDto.File.Length > 0)
                         {
-                            Directory.CreateDirectory(imagePath);
-                        }
-                        var filePath = Path.Combine(imagePath, menuItemUpdateDto.File.FileName);
-                        if (System.IO.File.Exists(filePath))
-                        {
-                            System.IO.File.Delete(filePath);
-                        }
-                        var filePath_OldFile = Path.Combine(_hostEnvironment.WebRootPath, menuItemFromDb.Image);
-                        if (System.IO.File.Exists(filePath_OldFile))
-                        {
-                            System.IO.File.Delete(filePath_OldFile);
-                        }
+                            var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                            if (!Directory.Exists(imagePath))
+                            {
+                                Directory.CreateDirectory(imagePath);
+                            }
+                            var filePath = Path.Combine(imagePath, menuItemUpdateDto.File.FileName);
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
+                            var filePath_OldFile = Path.Combine(_hostEnvironment.WebRootPath, menuItemFromDb.Image);
+                            if (System.IO.File.Exists(filePath_OldFile))
+                            {
+                                System.IO.File.Delete(filePath_OldFile);
+                            }
 
-                        // Uploading the image
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await menuItemUpdateDto.File.CopyToAsync(stream);
-                        }
+                            // Uploading the image
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await menuItemUpdateDto.File.CopyToAsync(stream);
+                            }
 
-                        menuItemFromDb.Image = "images/" + menuItemUpdateDto.File.FileName;
+                            menuItemFromDb.Image = "images/" + menuItemUpdateDto.File.FileName;
+                        }
                     }
 
                     

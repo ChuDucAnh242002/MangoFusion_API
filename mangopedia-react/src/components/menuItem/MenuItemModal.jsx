@@ -1,4 +1,5 @@
 import { CATEGORY, SPECIAL_TAG } from "../../utility/constant";
+import { toast } from "react-toastify";
 
 function MenuItemModal({
   formData,
@@ -6,25 +7,36 @@ function MenuItemModal({
   onClose,
   isSubmitting,
   onChange,
+  isEditing,
 }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(formData);
+    const errors = [];
 
     if (!formData.name?.trim()) {
-      console.log("Name is required");
-      return;
+      errors.push("Name is required");
     }
     if (!formData.category?.trim()) {
-      console.log("Category is required");
-      return;
+      errors.push("Category is required");
     }
     if (
       !formData.price ||
       parseFloat(formData.price <= 0 || formData.price >= 1000)
     ) {
-      console.log("Price is required and must be between 1-1000");
+      errors.push("Price is required and must be between 1-1000");
+    }
+    if (errors.length > 0) {
+      toast.error(
+        <div>
+          <strong>Please correct the following</strong>
+          <ul className="mb-0 mt-1 ps-3">
+            {errors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        </div>,
+      );
       return;
     }
 
@@ -46,7 +58,9 @@ function MenuItemModal({
         <div className={`modal-dialog modal-lg`} role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Add New Menu Item</h5>
+              <h5 className="modal-title">
+                {isEditing ? "Edit Menu Item" : "Add New Menu Item"}
+              </h5>
               <button
                 type="button"
                 className="btn-close"
@@ -75,7 +89,7 @@ function MenuItemModal({
                       <select
                         className="form-select"
                         name="category"
-                        value={formData.category | ""}
+                        value={formData.category}
                         onChange={onChange}
                       >
                         <option value="">Select Category</option>
@@ -140,6 +154,7 @@ function MenuItemModal({
                     type="file"
                     className="form-control"
                     name="image"
+                    onChange={onChange}
                     accept="image/*"
                   />
                   <div className="form-text">
@@ -163,7 +178,7 @@ function MenuItemModal({
                     {isSubmitting ? (
                       <span className="spinner-border spinner-border-sm me-2" />
                     ) : (
-                      <>CREATE MENU ITEM</>
+                      <>{isEditing ? "Update Menu Item" : "Create Menu Item"}</>
                     )}
                   </button>
                 </div>
