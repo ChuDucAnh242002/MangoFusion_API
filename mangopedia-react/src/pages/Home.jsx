@@ -1,5 +1,6 @@
-import { API_BASE_URL, CATEGORY } from "../utility/constant";
+import { API_BASE_URL, CATEGORY, ROUTES } from "../utility/constant";
 import { useGetMenuItemsQuery } from "../store/api/menuItemApi";
+import { Link } from "react-router-dom";
 
 import { useState } from "react";
 
@@ -21,7 +22,7 @@ function Home() {
       : true;
 
     const categoryMatch =
-      categoryFilter === "All" || item.category === categoryFilter;
+      categoryFilter === "" || item.category === categoryFilter;
 
     return searchMatch && categoryMatch;
   });
@@ -54,7 +55,7 @@ function Home() {
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
             >
-              <option value="All">All Category</option>
+              <option value="">All Category</option>
               {CATEGORY.map((category) => (
                 <option value={category} key={category}>
                   {category}
@@ -85,7 +86,6 @@ function Home() {
             </div>
           </div>
         )}
-
         {error && (
           <div className="alert alert-danger" role="alert">
             Error loading menu items: Unknown error
@@ -158,12 +158,12 @@ function Home() {
                       <div className="mt-auto">
                         <div className="row g-2">
                           <div className="col-6">
-                            <a
-                              href="#"
+                            <Link
+                              to={ROUTES.MENU_DETAIL.replace(":id", item.id)}
                               className="btn btn-outline-primary w-100 btn-sm fw-semibold"
                             >
                               <i className="bi bi-info-circle me-1"></i>Details
-                            </a>
+                            </Link>
                           </div>
                           <div className="col-6">
                             <button className="btn btn-primary w-100 btn-sm fw-semibold">
