@@ -9,15 +9,30 @@ import Register from "../pages/auth/Register";
 import OrderConfirmation from "../pages/order/OrderConfirmation";
 import { ROUTES } from "../utility/constant";
 import MenuItemDetails from "../pages/menu/MenuItemDetails";
+import RoleBasedRoutes from "./RoleBasedRoutes";
 
 const AppRoutes = () => (
   <Routes>
     <Route path={ROUTES.HOME} element={<Home />} />
     <Route path={ROUTES.LOGIN} element={<Login />} />
     <Route path={ROUTES.REGISTER} element={<Register />} />
-    <Route path={ROUTES.CART} element={<Cart />} />
+    <Route
+      path={ROUTES.CART}
+      element={
+        <RoleBasedRoutes>
+          <Cart />
+        </RoleBasedRoutes>
+      }
+    />
     <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
-    <Route path={ROUTES.MENU_DETAIL} element={<MenuItemDetails />} />
+    <Route
+      path={ROUTES.MENU_DETAIL}
+      element={
+        <RoleBasedRoutes allowedRoles={[ROLES.ADMIN]}>
+          <MenuItemDetails />
+        </RoleBasedRoutes>
+      }
+    />
     <Route path={ROUTES.ORDER_CONFIRMATION} element={<OrderConfirmation />} />
     <Route path={ROUTES.MENU_MANAGEMENT} element={<MenuItemManagement />} />
     <Route path={ROUTES.ORDER_MANAGEMENT} element={<OrderManagement />} />

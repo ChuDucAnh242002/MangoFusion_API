@@ -1,10 +1,13 @@
 import { API_BASE_URL, CATEGORY, ROUTES } from "../utility/constant";
 import { useGetMenuItemsQuery } from "../store/api/menuItemApi";
 import { Link } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
 import { useState } from "react";
+import { addToCart } from "../store/slice/cartSlice";
+import { toast } from "react-toastify";
 
 function Home() {
+  const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
 
@@ -14,6 +17,19 @@ function Home() {
     error,
     refetch,
   } = useGetMenuItemsQuery();
+
+  const handleAddToCart = (item) => {
+    dispatch(
+      addToCart({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        quantity: 1,
+      }),
+    );
+    toast.success(`${item.name} added to cart!`);
+  };
 
   const filteredItems = menuItems.filter((item) => {
     const searchMatch = searchTerm
@@ -103,7 +119,7 @@ function Home() {
           ) : (
             <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 mb-5">
               {filteredItems.map((item) => (
-                <div className="col">
+                <div className="col" key={item.id}>
                   <div className="card h-100 border shadow-sm position-relative">
                     <div className="position-relative overflow-hidden rounded-top">
                       <img
@@ -166,8 +182,12 @@ function Home() {
                             </Link>
                           </div>
                           <div className="col-6">
-                            <button className="btn btn-primary w-100 btn-sm fw-semibold">
-                              <i className="bi bi-cart-plus me-1"></i>Add Cart
+                            <button
+                              className="btn btn-primary w-100 btn-sm fw-semibold"
+                              onClick={() => handleAddToCart(item)}
+                            >
+                              <i className="bi bi-cart-plus me-1"></i>
+                              Add Cart
                             </button>
                           </div>
                         </div>

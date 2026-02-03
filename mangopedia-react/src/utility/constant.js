@@ -14,6 +14,11 @@ export const API_BASE_URL = "https://localhost:7227"
 
 export const CATEGORY = ["Appetizer", "Entrée", "Dessert"];
 
+export const ROLES = {
+    ADMIN: "Admin",
+    CUSTOMER: "Customer",
+};
+
 export const SPECIAL_TAG = [
     "",
     "Best Seller",
@@ -21,3 +26,9 @@ export const SPECIAL_TAG = [
     "Chef's Special",
     "New"
 ]
+
+export const STORAGE_KEYS = {
+    TOKEN: "token-mango",
+    USER: "user-mango",
+    CART: "cart-mango",
+}
