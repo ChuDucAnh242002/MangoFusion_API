@@ -2,6 +2,7 @@ import { ROUTES } from "../../utility/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { logout } from "../../store/slice/authSlice";
+import { ROLES } from "../../utility/constant";
 
 function Header() {
   const dispatch = useDispatch();
@@ -76,7 +77,7 @@ function Header() {
                       className="text-truncate"
                       style={{ maxWidth: "120px" }}
                     >
-                      Hello
+                      Hello {user?.name?.split(" ")?.[0] || "User"}
                     </span>
                   </button>
                   <ul
@@ -92,27 +93,32 @@ function Header() {
                     }}
                   >
                     {/* Removed header (avatar/name/role) for a cleaner minimal dropdown */}
-                    <li>
-                      <NavLink
-                        to={ROUTES.ORDER_MANAGEMENT}
-                        className="dropdown-item d-flex align-items-center gap-2 rounded-2"
-                      >
-                        <i className="bi bi-speedometer2 text-primary"></i>
-                        <span>Order Management</span>
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to={ROUTES.MENU_MANAGEMENT}
-                        className="dropdown-item d-flex align-items-center gap-2 rounded-2"
-                      >
-                        <i className="bi bi-list-ul text-primary"></i>
-                        <span>Menu Management</span>
-                      </NavLink>
-                    </li>
-                    <li>
-                      <hr className="dropdown-divider my-2" />
-                    </li>
+                    {user?.role == ROLES.ADMIN && (
+                      <>
+                        <li>
+                          <NavLink
+                            to={ROUTES.ORDER_MANAGEMENT}
+                            className="dropdown-item d-flex align-items-center gap-2 rounded-2"
+                          >
+                            <i className="bi bi-speedometer2 text-primary"></i>
+                            <span>Order Management</span>
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            to={ROUTES.MENU_MANAGEMENT}
+                            className="dropdown-item d-flex align-items-center gap-2 rounded-2"
+                          >
+                            <i className="bi bi-list-ul text-primary"></i>
+                            <span>Menu Management</span>
+                          </NavLink>
+                        </li>
+                        <li>
+                          <hr className="dropdown-divider my-2" />
+                        </li>
+                      </>
+                    )}
+
                     <li>
                       <button
                         onClick={() => handleLogout()}

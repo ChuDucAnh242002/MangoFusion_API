@@ -55,7 +55,7 @@ namespace MangoFusion_API.Controllers
             var ratings = orderDetailsWithRatings.Select(u => u.Rating.Value);
             double avgRating = ratings.Any() ? ratings.Average() : 0;
             menuItem.Rating = avgRating;
-            _response.Result = menuItem;
+            _response.Result = menuItem; 
             _response.StatusCode = HttpStatusCode.OK;
             return Ok(_response);
         }

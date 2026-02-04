@@ -2,6 +2,7 @@
 using MangoFusion_API.Models;
 using MangoFusion_API.Models.Dto;
 using MangoFusion_API.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -9,6 +10,7 @@ using System.Net;
 namespace MangoFusion_API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class OrderHeaderController : Controller
     {
@@ -101,6 +103,7 @@ namespace MangoFusion_API.Controllers
                     _response.Result = orderHeader;
                     orderHeader.OrderDetails = [];
                     _response.StatusCode = HttpStatusCode.Created;
+                    _response.IsSuccess = true;
                     return CreatedAtAction(nameof(GetOrder), new { orderId = orderHeader.OrderHeaderId }, _response);
                 }
                 else

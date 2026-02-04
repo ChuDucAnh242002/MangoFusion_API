@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { API_BASE_URL, ROUTES } from "../../utility/constant";
+import { useCreateOrderMutation } from "../../store/api/ordersApi";
 import {
   clearCart,
   removeFromCart,
@@ -13,6 +14,8 @@ import {
 function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [createOrder, { isLoading }] = useCreateOrderMutation();
   const { items, totalAmount, totalItems } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
 
@@ -73,23 +76,38 @@ function Cart() {
       return;
     }
 
-    const registeredData = {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      role: formData.role,
+    if (!user?.id) {
+      toast.error("Unable to identify user. Please log in again.");
+      return;
+    }
+
+    const orderData = {
+      pickUpName: formData.pickUpName,
+      pickUpPhoneNumber: formData.pickUpPhoneNumber,
+      pickUpEmail: formData.pickUpEmail,
+      applicationUserId: user?.id,
+      orderTotal: totalAmount,
+      totalItem: totalItems,
+      orderDetails: items.map((item) => ({
+        menuItemId: item.id,
+        quantity: item.quantity,
+        itemName: item.name,
+        price: item.price,
+      })),
     };
+    console.log(orderData);
 
     try {
-      const result = await registeredUser(registeredData).unwrap();
+      const result = await createOrder(orderData).unwrap();
       if (result.isSuccess) {
-        toast.success("Registration successful! Please log in to continue");
-        navigate(ROUTES.LOGIN);
+        toast.success("Order placed successfully");
+        // navigate(ROUTES.LOGIN);
       } else {
-        toast.error(result.errorMessages?.[0] || "Registration failed");
+        toast.error(result.errorMessages?.[0] || "Failed to place order");
       }
+      console.log(result);
     } catch (error) {
-      toast.error(error.data?.errorMessages?.[0]);
+      toast.error(error.data?.errorMessages?.[0] || "Failed to place order");
     }
   };
 
@@ -167,7 +185,9 @@ function Cart() {
                           <div className="flex-grow-1">
                             <div className="row align-items-center">
                               <div className="col-md-4">
-                                <h6 className="mb-1 fw-semibold">item.name</h6>
+                                <h6 className="mb-1 fw-semibold">
+                                  {item.name}
+                                </h6>
                                 <div className="text-muted small">
                                   ${parseFloat(item.price).toFixed(2)} each
                                 </div>
@@ -344,11 +364,22 @@ function Cart() {
 
                     {/* Place Order Button */}
                     <div className="d-grid">
-                      <button className="btn btn-primary btn-lg" type="submit">
-                        <span className="spinner-border spinner-border-sm me-2"></span>
-                        Processing...
-                        <i className="bi bi-credit-card me-2"></i>
-                        Place Order (${totalAmount.toFixed(2)})
+                      <button
+                        className="btn btn-primary btn-lg"
+                        type="submit"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <>
+                            <span className="spinner-border spinner-border-sm me-2"></span>
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <i className="bi bi-credit-card me-2"></i>
+                            Place Order (${totalAmount.toFixed(2)})
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>

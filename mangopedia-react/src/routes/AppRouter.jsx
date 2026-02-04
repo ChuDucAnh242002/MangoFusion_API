@@ -10,6 +10,7 @@ import OrderConfirmation from "../pages/order/OrderConfirmation";
 import { ROUTES } from "../utility/constant";
 import MenuItemDetails from "../pages/menu/MenuItemDetails";
 import RoleBasedRoutes from "./RoleBasedRoutes";
+import { ROLES } from "../utility/constant";
 
 const AppRoutes = () => (
   <Routes>
@@ -19,22 +20,22 @@ const AppRoutes = () => (
     <Route
       path={ROUTES.CART}
       element={
-        <RoleBasedRoutes>
+        <RoleBasedRoutes allowedRoles={[ROLES.ADMIN, ROLES.CUSTOMER]}>
           <Cart />
         </RoleBasedRoutes>
       }
     />
     <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
     <Route
-      path={ROUTES.MENU_DETAIL}
+      path={ROUTES.MENU_MANAGEMENT}
       element={
         <RoleBasedRoutes allowedRoles={[ROLES.ADMIN]}>
-          <MenuItemDetails />
+          <MenuItemManagement />
         </RoleBasedRoutes>
       }
     />
     <Route path={ROUTES.ORDER_CONFIRMATION} element={<OrderConfirmation />} />
-    <Route path={ROUTES.MENU_MANAGEMENT} element={<MenuItemManagement />} />
+    <Route path={ROUTES.MENU_DETAIL} element={<MenuItemDetails />} />
     <Route path={ROUTES.ORDER_MANAGEMENT} element={<OrderManagement />} />
   </Routes>
 );

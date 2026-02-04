@@ -119,7 +119,7 @@ namespace MangoFusion_API.Controllers
                             new ("fullname", userFromDb.Name),
                             new ("id", userFromDb.Id),
                             new (ClaimTypes.Email, userFromDb.Email!.ToString()),
-                            new (ClaimTypes.Email, _userManager.GetRolesAsync(userFromDb).Result.FirstOrDefault()!)
+                            new (ClaimTypes.Role, _userManager.GetRolesAsync(userFromDb).Result.FirstOrDefault()!)
                             ]),
                         Expires = DateTime.UtcNow.AddDays(7),
                         SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

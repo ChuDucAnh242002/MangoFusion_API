@@ -1,5 +1,6 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { ROUTES } from "../utility/constant";
 
 function RoleBasedRoutes({ allowedRoles, children }) {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -33,22 +34,37 @@ function RoleBasedRoutes({ allowedRoles, children }) {
                 <div className="p-3 rounded mb-4">
                   <p className="mb-1">
                     <strong>Your role: </strong>
-                    <span className="badge bg-secondary ms-1">"Unknown"</span>
+                    <span className="badge bg-secondary ms-1">
+                      {user?.role || "Unknown"}
+                    </span>
                   </p>
                   <p className="mb-0">
                     <strong>Required roles: </strong>
-                    REQUIRED ROLES
+                    {Array.isArray(allowedRoles) ? (
+                      allowedRoles.map((role) => (
+                        <span key={role} className="badge bg-primary ms-1 ">
+                          {role}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="badge bg-primary ms-1 ">
+                        {allowedRoles}
+                      </span>
+                    )}
                   </p>
                 </div>
                 <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                  <button className="btn btn-secondary">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => window.history.back()}
+                  >
                     <i className="bi bi-arrow-left me-2"></i>
                     Go Back
                   </button>
-                  <a href="/" className="btn btn-primary">
+                  <Link to={ROUTES.HOME} className="btn btn-primary">
                     <i className="bi bi-house me-2"></i>
                     Go Home
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
