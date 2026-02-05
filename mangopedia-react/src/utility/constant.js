@@ -32,3 +32,10 @@ export const STORAGE_KEYS = {
     USER: "user-mango",
     CART: "cart-mango",
 }
+
+export const ORDER_STATUS = {
+    CONFIRMED: "Confirmed",
+    READY_FOR_PICKUP: "Ready for Pickup",
+    COMPLETED: "Completed",
+    CANCELLED: "Cancelled",
+}

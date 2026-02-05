@@ -49,4 +49,4 @@ export const ordersApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useGetOrdersMutation, useCreateOrderMutation, useUpdateOrderMutation, useGetOrderByIdMutation } = ordersApi;
+export const { useGetOrdersQuery, useCreateOrderMutation, useUpdateOrderMutation, useGetOrderByIdMutation } = ordersApi;

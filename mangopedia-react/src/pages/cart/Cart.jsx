@@ -101,6 +101,18 @@ function Cart() {
       const result = await createOrder(orderData).unwrap();
       if (result.isSuccess) {
         toast.success("Order placed successfully");
+        navigate(ROUTES.ORDER_CONFIRMATION, {
+          state: {
+            orderData: {
+              orderNumber: result.result.orderHeaderId,
+              pickUpName: formData.pickUpName,
+              pickUpEmail: formData.pickUpEmail,
+              pickUpPhoneNumber: formData.pickUpPhoneNumber,
+              orderTotal: totalAmount,
+              totalItems: totalItems,
+            },
+          },
+        });
         // navigate(ROUTES.LOGIN);
       } else {
         toast.error(result.errorMessages?.[0] || "Failed to place order");
