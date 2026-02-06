@@ -5,7 +5,9 @@ This is a simple .NET -based API that has simple API endpoints for managing Mang
 ## Technology used
 
 Frontend: React.js, Redux
+
 Backend: .NET, C#
+
 Database: MSSQL
 
 # How to run the project
@@ -14,9 +16,7 @@ To run the frontend, go to mangopedia-react folder, install dependencies and run
 
 ```
 cd mangopedia-react
-
 npm install
-
 npm run dev
 ```
 
