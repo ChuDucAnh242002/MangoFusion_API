@@ -14,7 +14,9 @@ To run the frontend, go to mangopedia-react folder, install dependencies and run
 
 ```
 cd mangopedia-react
+
 npm install
+
 npm run dev
 ```
 
