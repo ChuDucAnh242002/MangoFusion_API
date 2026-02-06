@@ -2,6 +2,36 @@
 
 This is a simple .NET -based API that has simple API endpoints for managing Mango E-commerce store.
 
+## Technology used
+
+Frontend: React.js, Redux
+Backend: .NET, C#
+Database: MSSQL
+
+# How to run the project
+
+To run the frontend, go to mangopedia-react folder, install dependencies and run the program with command
+
+```
+cd mangopedia-react
+npm install
+npm run dev
+```
+
+The frontend will be accessible through http://localhost:5173/
+
+To run the backend, go to MangoFusion_API in Visual Insider and click run button with HTTPS.
+
+The backend will be accessible through https://localhost:7227/
+
+You can access the backend url and view all the API endpoints through scalar
+
+# Interface
+
+![Mango fusion interface](./img/Mango_fusion.png)
+
+# API endpoints
+
 Here are brief summary of the all the API endpoints:
 
 | Method |               Endpoint               | Description                        |
